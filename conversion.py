@@ -2,6 +2,8 @@
 # Carné 20679
 # Laboratorio 2
 
+import sys
+
 def text_to_bits(text):
 
     result_bits = ""
@@ -49,3 +51,31 @@ def base64_to_text(base64_text):
             
     text_result = bits_to_text(bits_result)
     return text_result
+
+def xor(a, b):
+    a_bool = bool(int(a))
+    b_bool = bool(int(b))
+    result = int((a_bool or b_bool) and not (a_bool and b_bool))
+    return str(result)
+
+def binary_to_number(binary):
+
+    number_list = []
+
+    for i in range(0, len(binary), 8):
+        bit_group = binary[i:i+8]
+        number_result = int()
+        for index, char in enumerate(bit_group):
+            int_char = int(char) * (2 ** (len(bit_group) - (index + 1)))
+            number_result += int_char
+
+        number_list.append(number_result)
+
+    return number_list
+
+def decrypt(binary_text, binary_key):
+    decrypted_binary = ""
+    for a, b in zip(binary_text, binary_key):
+        decrypted_binary += xor(a, b)
+
+    return decrypted_binary
