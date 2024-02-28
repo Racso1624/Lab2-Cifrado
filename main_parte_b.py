@@ -4,6 +4,7 @@
 
 import base64
 from conversion import *
+import matplotlib.pyplot as plt
 
 # Inciso 6
 print("Inciso 6")
@@ -35,8 +36,8 @@ with open("./resultado_inciso_6.png", "wb") as file:
 
 print("Imagen descifrada")
 
-# Inciso 7
-print("Inciso 7")
+# Inciso 8
+print("Inciso 8")
 
 image_1 = open("./images/madvillainy.png", "rb").read()
 base64_image_1_encode = base64.b64encode(image_1).decode("utf-8")
@@ -58,3 +59,54 @@ with open("./resultado_inciso_8.png", "wb") as file:
     file.write(image_2_result)
 
 print("Imagen cifrada")
+
+
+# Inciso 9
+# Para realizar este inciso se utilizara los bits de la primera imagen con XOR
+print("Inciso 9")
+
+single_bits = { "0": 0, "1": 0 }
+for i in range(len(image_bits)):
+    actual_bit = image_bits[i]
+    if (actual_bit in single_bits):
+        single_bits[actual_bit] += 1
+
+bigram_bits = { "00": 0, "01": 0, "10": 0, "11": 0 }
+for i in range(0, len(image_bits) - 1, 2):
+    actual_bigram = image_bits[i: i + 2]
+    if (actual_bigram in bigram_bits):
+        bigram_bits[actual_bigram] += 1
+
+trigram_bits = { "000": 0, "001": 0, "010": 0, "011": 0, "100": 0, "101": 0, "110": 0, "111": 0 }
+for i in range(0, len(image_bits) - 2, 3):
+    actual_trigram: str = image_bits[i: i + 3]
+    if (actual_trigram in trigram_bits):
+        trigram_bits[actual_trigram] += 1
+
+fig, axs = plt.subplots(3, 1, figsize=(10, 15))
+
+# Graficar bits simples
+singles, counts = list(single_bits.keys()), list(single_bits.values())
+axs[0].bar(singles, counts)
+axs[0].set_xlabel("Bit Simples")
+axs[0].set_ylabel("Frecuencias")
+axs[0].set_title("Frecuencia de Bits Simples")
+
+# Graficar bigramas
+bigrams, counts = list(bigram_bits.keys()), list(bigram_bits.values())
+axs[1].bar(bigrams, counts)
+axs[1].set_xlabel("Bigramas")
+axs[1].set_ylabel("Frecuencias")
+axs[1].set_title("Frecuencia de Bigramas")
+
+# Graficar trigramas
+trigrams, counts = list(trigram_bits.keys()), list(trigram_bits.values())
+axs[2].bar(trigrams, counts)
+axs[2].set_xlabel("Trigramas")
+axs[2].set_ylabel("Frecuencias")
+axs[2].set_title("Frecuencia de Trigramas")
+
+plt.subplots_adjust(hspace=0.5, top=0.95)
+
+# Mostrar los gráficos
+plt.show()
